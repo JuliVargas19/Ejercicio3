@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+
 
 @Preview(showBackground = true)
 @Composable
@@ -15,25 +15,15 @@ fun Navigation() {
 
     NavHost(navController = navController, startDestination = "registro") {
         composable("registro") {
-            Registro { nombre, raza, tamano, edad, fotoUrl ->
-                navController.navigate("carnet/$nombre/$raza/$tamano/$fotoUrl")
-            }
+            Registro(navController = navController)
         }
-        composable(
-            route = "carnet/{nombre}/{raza}/{tamano}/{urlFoto}",
-            arguments = listOf(
-                navArgument("nombre") { type = NavType.StringType },
-                navArgument("raza") { type = NavType.StringType },
-                navArgument("tamano") { type = NavType.StringType },
-                navArgument("urlFoto") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
+        composable("carnet/{nombre}/{raza}/{tamano}/{fotoUrl}") { backStackEntry ->
             val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
             val raza = backStackEntry.arguments?.getString("raza") ?: ""
             val tamano = backStackEntry.arguments?.getString("tamano") ?: ""
-            val urlFoto = backStackEntry.arguments?.getString("urlFoto") ?: ""
+            val fotoUrl = backStackEntry.arguments?.getString("fotoUrl") ?: ""
 
-            Carnet(nombre, raza, tamano, urlFoto)
+            Carnet(nombre = nombre, raza = raza, tamano = tamano, urlFoto = fotoUrl)
         }
     }
 }

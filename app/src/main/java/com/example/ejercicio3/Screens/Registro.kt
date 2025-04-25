@@ -1,17 +1,15 @@
 package com.example.ejercicio3.Screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun Registro(onRegistrar: (String, String, String, String, String) -> Unit) {
-
+fun Registro(navController: NavController) {
     var nombre by remember { mutableStateOf("") }
     var raza by remember { mutableStateOf("") }
     var tamano by remember { mutableStateOf("") }
@@ -42,11 +40,23 @@ fun Registro(onRegistrar: (String, String, String, String, String) -> Unit) {
         OutlinedTextField(
             value = fotoUrl,
             onValueChange = { fotoUrl = it },
-            label = { Text("Foto url") }
+            label = { Text("Foto URL") }
         )
         Button(
             onClick = {
-                onRegistrar(nombre, raza, tamano, edad, fotoUrl)
+                if (nombre.isNotBlank() && raza.isNotBlank() && tamano.isNotBlank() &&
+                    edad.isNotBlank() && fotoUrl.isNotBlank()
+                ) {
+                    val edadInt = edad.toIntOrNull()
+                    if (edadInt != null) {
+
+                        navController.navigate("carnet/$nombre/$raza/$tamano/$fotoUrl")
+                    } else {
+                        Toast.makeText(navController.context, "Edad debe ser un número válido", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(navController.context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
